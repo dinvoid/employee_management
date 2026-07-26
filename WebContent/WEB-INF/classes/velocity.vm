@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Management</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { border-collapse: collapse; width: 60%; margin-top: 15px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .form-group { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <h2>Employee Management</h2>
+
+    <!-- FORM PARA SA PAG-CREATE NG EMPLOYEE -->
+    <fieldset style="width: 50%;">
+        <legend><strong>Add New Employee</strong></legend>
+        <form action="CreateEmployee.action" method="post">
+            <div class="form-group">
+                <label>Name:</label><br/>
+                <input type="text" name="name" required />
+            </div>
+            <div class="form-group">
+                <label>Department:</label><br/>
+                <input type="text" name="department" required />
+            </div>
+            <button type="submit">Save Employee</button>
+        </form>
+    </fieldset>
+
+    <br/>
+
+    <!-- BUTTON PARA MAG-SEARCH / MAG-FETCH NG LIST -->
+    <form action="EmployeeMaint.action" method="post">
+        <button type="submit">Load / Search Employees</button>
+    </form>
+
+    <h3>Employee List</h3>
+
+    <!-- CHECK KUNG MAY LAMANG LISTAHAN -->
+    #if($empList && $empList.size() > 0)
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- LOOP SA EMPLOYEELIST (Tinatawag nito ang getEmpList()) -->
+                #foreach($emp in $empList)
+                <tr>
+                    <td>$velocityCount</td>
+                    <td>$!emp.name</td>
+                    <td>$!emp.department</td>
+                </tr>
+                #end
+            </tbody>
+        </table>
+        <p>Total Records: <strong>$empList.size()</strong></p>
+    #else
+        <p><em>No employees found. Click "Load / Search Employees" or add a new one.</em></p>
+    #end
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+<components>
+	<component>
+	<scope>session</scope>
+	<class>util.PartyHashMapImpl</class>
+	<enabler>util.PartyHashMapAware</enabler>
+	</component>
+</components>

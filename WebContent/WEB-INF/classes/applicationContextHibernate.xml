@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+"http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <!-- Session Factory -->
+    <bean id="empmSessionFactory"
+          class="org.springframework.orm.hibernate.LocalSessionFactoryBean">
+
+        <property name="mappingResources">
+            <list>
+                <value>hbm/Employee.hbm.xml</value>
+            </list>
+        </property>
+
+        <property name="hibernateProperties">
+            <props>
+
+                <prop key="hibernate.connection.driver_class">
+                    ${jdbc.driverClassName}
+                </prop>
+
+                <prop key="hibernate.connection.url">
+                    ${jdbc.url}
+                </prop>
+
+                <prop key="hibernate.connection.username">
+                    ${jdbc.username}
+                </prop>
+
+                <prop key="hibernate.connection.password">
+                    ${jdbc.password}
+                </prop>
+
+                <prop key="hibernate.dialect">
+                    ${jdbc.dialect}
+                </prop>
+
+                <prop key="hibernate.show_sql">
+                    true
+                </prop>
+
+                <prop key="hibernate.hbm2ddl.auto">
+                    update
+                </prop>
+
+            </props>
+
+        </property>
+
+    </bean>
+
+</beans>

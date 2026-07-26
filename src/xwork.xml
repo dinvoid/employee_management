@@ -1,0 +1,55 @@
+<!DOCTYPE xwork PUBLIC "-//OpenSymphony Group//XWork 1.0//EN"
+    "http://www.opensymphony.com/xwork/xwork-1.0.dtd">
+<xwork>
+  <include file="webwork-default.xml"/>
+  <package name="default" extends="webwork-default">
+  
+    
+    <action name="sayHi" 
+            class="action.HelloAction">
+    		<interceptor-ref name="defaultStack"/>
+    		<result name="success" type="velocity">velocity.vm</result>
+    </action>  
+    <action name="Employee" 
+    		class="action.EmployeeAction">  
+       <result name="success" type="dispatcher">
+         <param name="location">views/employee.jsp</param>
+       </result>
+    </action>  
+    <action name="CreateEmployee" 
+    		class="action.EmployeeAction"
+    		method="createEmployee"> 
+    		<interceptor-ref name="defaultStack"/> 
+    		<result name="success">/views/employee.jsp</result>
+    </action> 
+    <action name="EmployeeMaint" 
+    		class="action.EmployeeAction" 
+    		method="searchEmployee">
+    		<interceptor-ref name="defaultStack"/> 
+    		<result name="success">/views/employee.jsp</result>
+    </action>
+    
+    <!-- for velocity --> 
+    <action name="CreateEmployee" 
+    		class="action.EmployeeAction"
+    		method="createEmployee"> 
+    		<interceptor-ref name="defaultStack"/> 
+    		<result name="success" type="velocity">velocity.vm</result>
+    </action> 
+        <action name="EmployeeMaint" 
+    		class="action.EmployeeAction" 
+    		method="searchEmployee">
+    		<interceptor-ref name="defaultStack"/> 
+    		<result name="success" type="velocity">velocity.vm</result>
+    </action>
+    <!-- Para sa Angular / API request  -->
+    <action name="GetEmployeeListApi" 
+            class="action.EmployeeAction" 
+            method="getEmployeeListApi">
+            <interceptor-ref name="defaultStack"/>
+            <!-- WALANG <result> tag kasi 'return null;' ang gagamitin sa Java! -->
+    </action>
+     
+  </package>
+</xwork>
+
