@@ -79,6 +79,11 @@ public class EmployeeAction extends ActionSupport implements PartyHashMapAware {
         try {
             // 1. I-prep ang HttpServletResponse para sa JSON Output
             HttpServletResponse response = ServletActionContext.getResponse();
+
+            response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+            response.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+            response.setHeader("Access-Control-Allow-Headers", "*");
+
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
 
@@ -87,16 +92,19 @@ public class EmployeeAction extends ActionSupport implements PartyHashMapAware {
 
             // Gagawa ng sample Employee 1
             Employee emp1 = new Employee();
-            emp1.setName("Juan Dela Cruz");
-            emp1.setDepartment("IT Department");
+            emp1.setId(1);            
+            emp1.setName("Juans Dela Cruz");
+            emp1.setDepartment("IT Departments");
 
             // Gagawa ng sample Employee 2
             Employee emp2 = new Employee();
+            emp2.setId(2);
             emp2.setName("Maria Clara");
             emp2.setDepartment("HR Department");
 
             // Gagawa ng sample Employee 3
             Employee emp3 = new Employee();
+            emp3.setId(4);
             emp3.setName("Crisostomo Ibarra");
             emp3.setDepartment("Finance Department");
 
@@ -111,13 +119,18 @@ public class EmployeeAction extends ActionSupport implements PartyHashMapAware {
 
             // 4. Isulat at I-send sa Response pabalik sa Angular Frontend
             response.getWriter().write(jsonOutput);
+            response.getWriter().flush();
+            response.getWriter().close();
 
+           
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return NONE;
+
 
         // IMPORTANT: Always 'return null;' para hindi na maghanap si WebWork ng .vm o .jsp page!
-        return null;
+       // return null;
     } 
 
     // Getters and setters
