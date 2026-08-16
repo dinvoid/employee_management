@@ -11,9 +11,11 @@
         <property name="location">
             <value>classpath:jdbc.properties</value>
         </property>
+        
 
     </bean>
 
     <import resource="applicationContextHibernate.xml"/>
+    <import resource="applicationContextScheduler.xml"/>
 
 </beans>

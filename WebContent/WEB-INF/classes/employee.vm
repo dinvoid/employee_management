@@ -1,0 +1,527 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Employee Report</title>
+    <style>
+    
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+        .container {
+            width: 900px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .buttons {
+            margin-bottom: 20px;
+        }
+        .btn {
+            padding: 8px 18px;
+            margin-right: 5px;
+            border: 1px solid #ccc;
+            background: #f5f5f5;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: #337ab7;
+            color: white;
+        }
+        .btn-success {
+            background: #5cb85c;
+            color: white;
+        }
+        .form-row {
+            margin-bottom: 15px;
+        }
+        .form-row label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+        .form-control {
+            width: 250px;
+            padding: 7px;
+        }
+        .employee-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .employee-table th,
+        .employee-table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .employee-table th {
+            background: #f5f5f5;
+        }
+        .select-column {
+            width: 70px;
+            text-align: center;
+        }
+         #employeeTable {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background: #fff;
+    }
+
+    #employeeTable th,
+    #employeeTable td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+
+    #employeeTable th {
+        background: #f5f5f5;
+        font-weight: bold;
+    }
+
+    #employeeTable th:first-child,
+    #employeeTable td:first-child {
+        width: 50px;
+        text-align: center;
+    }
+
+    #employeeTable tbody tr:hover {
+        background: #f9f9f9;
+    }
+
+    #employeeTable .employeeCheckbox {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+    }
+    
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">Employee Report</div>
+
+    <!-- MESSAGE (SAFE POSITION) -->
+	#if($message)
+	    <div id="messageHolder"
+	         style="font-weight:bold; margin-bottom:15px;">
+	        $message
+	    </div>
+	#else
+	    <div id="messageHolder"
+	         style="font-weight:bold; margin-bottom:15px;">
+	    </div>
+	#end
+
+    <form id="employeeReportForm">
+
+        <!-- BUTTONS -->
+        <div class="buttons">
+            <button type="button" class="btn btn-primary" onclick="process()">Process</button>
+            <button type="button" class="btn btn-success" onclick="createPdf()">Create PDF</button>
+            <button type="button" class="btn" onclick="downloadPdf()">Download PDFs</button>
+            <button type="button" class="btn" onclick="downloadExcel()">Download Excels</button>
+            <button type="button" class="btn" onclick="exitPage()">Exit</button>
+        </div>
+
+        <!-- PARAMETERS -->
+        <div class="form-row">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" class="form-control">
+        </div>
+
+        <div class="form-row">
+            <label for="department">Department:</label>
+            <select id="department" name="department" class="form-control">
+                <option value="">-- Select Department --</option>
+                <option value="IT">IT Department</option>
+                <option value="HR">HR Department</option>
+                <option value="FINANCE">Finance Department</option>
+            </select>
+
+            
+        </div>
+
+    </form>
+<table id="employeeTable">
+
+    <thead>
+    
+        <tr>
+            <th>Select</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Department</th>
+        </tr>
+    </thead>
+
+    <tbody id="employeeTableBody">
+        #foreach($emp in $empList)
+        <tr onclick="showEmployeeModal(
+                '$!emp.id',
+                '$!emp.name'
+            )" style="cursor:pointer;">
+            <td>
+                <input type="checkbox"
+                       name="selectedEmployees"
+                       value="$emp.id"
+                       class="employeeCheckbox">
+            </td>
+            <td>$emp.id</td>
+            <td>$emp.name</td>
+            <td>$emp.department</td>
+        </tr>
+        #end
+    </tbody>
+
+</table>
+#parse("modal.vm")
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+function downloadExcel() {
+    window.location.href = "DownloadEmployeeExcel.action";
+}
+function process() {
+
+    var name = jQuery("#name").val();
+    var department = jQuery("#department").val();
+
+    console.log("Name:", name);
+    console.log("Department:", department);
+
+    // Clear old rows
+    jQuery("#employeeTableBody").empty();
+
+    // Processing message
+    jQuery("#messageHolder")
+        .css("color", "black")
+        .text("Processing...");
+
+    // Disable Process
+    jQuery(".btn-primary").prop("disabled", true);
+
+    jQuery.ajax({
+
+        url: "SearchEmployeeParams.action",
+
+        type: "POST",
+
+        data: {
+            name: name,
+            department: department
+        },
+
+        success: function(data) {
+
+            console.log("===== AJAX SUCCESS =====");
+            console.log("Returned data:");
+            console.log(data);
+
+            // Convert returned employee.vm into DOM
+            var responseHtml = jQuery("<div>").append(
+                jQuery.parseHTML(data)
+            );
+
+            // Get message from returned employee.vm
+            var message = responseHtml
+                .find("#messageHolder")
+                .text()
+                .trim();
+
+            console.log("Returned message:", message);
+
+            // Get rows from returned employee.vm
+            var rows = responseHtml
+                .find("#employeeTableBody")
+                .html();
+
+            console.log("Returned rows:", rows);
+
+            // Display message
+            if (message) {
+                jQuery("#messageHolder")
+                    .css(
+                        "color",
+                        message === "Success retrieve"
+                            ? "green"
+                            : "red"
+                    )
+                    .text(message);
+            }
+
+            // Render employee rows
+            if (rows) {
+                jQuery("#employeeTableBody")
+                    .html(rows);
+            } else {
+                jQuery("#employeeTableBody")
+                    .empty();
+            }
+
+            console.log(
+                "Rendered row count:",
+                jQuery("#employeeTableBody tr").length
+            );
+
+            // Enable Process
+            jQuery(".btn-primary")
+                .prop("disabled", false);
+        },
+
+        error: function(xhr) {
+
+            console.log("===== AJAX ERROR =====");
+            console.log("Status:", xhr.status);
+            console.log("Response:", xhr.responseText);
+
+            // Since error also returns employee.vm,
+            // get message from returned page
+            var responseHtml = jQuery("<div>").append(
+                jQuery.parseHTML(xhr.responseText)
+            );
+
+            var message = responseHtml
+                .find("#messageHolder")
+                .text()
+                .trim();
+
+            if (!message) {
+                message = "Server error: " + xhr.status;
+            }
+
+            jQuery("#messageHolder")
+                .css("color", "red")
+                .text(message);
+
+            jQuery("#employeeTableBody")
+                .empty();
+
+            jQuery(".btn-primary")
+                .prop("disabled", false);
+        }
+    });
+}
+
+function getSelectedEmployees() {
+
+    var selectedEmployees = [];
+
+    jQuery(".employeeCheckbox:checked").each(function() {
+        selectedEmployees.push(jQuery(this).val());
+    });
+
+    console.log("Selected employees:", selectedEmployees);
+
+    return selectedEmployees;
+}
+
+
+
+
+
+function process2() {
+
+    var name = jQuery("#name").val();
+    var department = jQuery("#department").val();
+
+    console.log("Name:", name);
+    console.log("Department:", department);
+
+    // Show Processing immediately
+    jQuery("#messageHolder")
+        .css("color", "black")
+        .text("Processing...");
+
+    // Clear previous table
+    jQuery("#employeeTableBody").html("");
+
+    // Disable Process button
+    jQuery(".btn-primary").prop("disabled", true);
+
+    jQuery.ajax({
+
+        url: "SearchEmployeeParams.action",
+
+        type: "POST",
+
+        data: {
+            name: name,
+            department: department
+        },
+
+        success: function(data) {
+
+            console.log("AJAX SUCCESS");
+            console.log("Response:", data);
+
+            /*
+             * data is the returned employee.vm HTML.
+             * Extract messageHolder and table body
+             * from that returned HTML.
+             */
+
+            var response = jQuery("<div>").append(
+                jQuery.parseHTML(data)
+            );
+
+            var message = response
+                .find("#messageHolder")
+                .text()
+                .trim();
+
+            var tableRows = response
+                .find("#employeeTableBody")
+                .html();
+
+            console.log("Returned message:", message);
+            console.log("Returned rows:", tableRows);
+
+            /*
+             * If records were successfully retrieved
+             */
+            if (message === "Success retrieve") {
+
+                jQuery("#messageHolder")
+                    .css("color", "green")
+                    .text(message);
+
+                jQuery("#employeeTableBody")
+                    .html(tableRows);
+
+            } else {
+
+                /*
+                 * Validation error or no records
+                 */
+                jQuery("#messageHolder")
+                    .css("color", "red")
+                    .text(message);
+
+                jQuery("#employeeTableBody")
+                    .html("");
+            }
+
+            // Enable Process button
+            jQuery(".btn-primary").prop("disabled", false);
+        },
+
+        error: function(xhr) {
+
+            console.log("AJAX ERROR");
+            console.log("Status:", xhr.status);
+            console.log("Response:", xhr.responseText);
+
+            /*
+             * Try to get the message from returned employee.vm
+             */
+            var response = jQuery("<div>").append(
+                jQuery.parseHTML(xhr.responseText)
+            );
+
+            var message = response
+                .find("#messageHolder")
+                .text()
+                .trim();
+
+            if (!message) {
+                message = "Server error: " + xhr.status;
+            }
+
+            jQuery("#messageHolder")
+                .css("color", "red")
+                .text(message);
+
+            jQuery("#employeeTableBody")
+                .html("");
+
+            jQuery(".btn-primary").prop("disabled", false);
+        }
+
+    });
+}
+
+function createPdf() {
+    alert("Create PDF clicked");
+}
+
+function downloadPdf() {
+    jQuery.ajax({
+        url: "CreateEmployeePdf.action",
+        type: "GET",
+        success: function(data) {
+            console.log("DOWNLOAD PDF SUCCESS");
+        }
+    });
+}
+
+function exitPage() {
+    window.location.href = "ExitEmployee.action";
+}
+function rowClick(policyNo, employeeName) {
+    alert(
+        "Policy No: " + policyNo +
+        "\nEmployee: " + employeeName
+    );
+}
+
+function showModal() {
+    document.getElementById("myModal").style.display = "block";
+}
+function showEmployeeModal(id, name) {
+
+    jQuery.ajax({
+        url: "EmployeePrint!getEmpList22.action",
+        type: "POST",
+
+        data: {
+            selectedId: id,
+            selectedName: name
+        },
+
+        success: function(response) {
+
+            console.log("===== AJAX SUCCESS =====");
+            console.log(response);
+            console.log("Response length:", response.length);
+
+            // Remove existing modal if meron
+            jQuery("#employeeModal").remove();
+
+            // Insert the rendered modal from modal.vm
+            jQuery("body").append(response);
+
+            // Show the newly inserted modal
+            jQuery("#employeeModal").show();
+
+            console.log("getEmpList22 success");
+
+        },
+
+        error: function(xhr, status, error) {
+
+            console.log("AJAX Error: " + error);
+            console.log(xhr.responseText);
+
+        }
+    });
+
+}
+function closeModal() {
+    document.getElementById("employeeModal").style.display = "none";
+}
+/*]]>*/
+</script>
+</body>
+</html>

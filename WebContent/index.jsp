@@ -9,5 +9,67 @@
   <a href="Employee.action">Go to Student form using vm or velocity</a>
   <h2>Go ot vm sayhi</h2>
     <a href="sayHi.action">Go to Student form using vm or velocity</a>
+     <h2>Go to vm na nkl na object fields</h2>
+    <a href="ForNKL.action">Go to vm na nkl na object fieldss</a>
+    
+
+     <h2>go to printing page</h2>
+    <a href="EmployeePrint.action">Go employee printing pdf</a>
+    
+               <button type="button" class="btn btn-success" onclick="testAjaxjQuery()">Create ajax jquery</button>
+             <button type="button" class="btn btn-success" onclick="testAjax()">Create ajax</button>
+    
+              <button type="button" class="btn btn-success" onclick="createPdf()">Create pdf</button>   
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script type="text/javascript">
+
+function createPdf() {
+
+    alert("Create PDF clicked");
+
+}
+
+
+function testAjax() {
+
+    alert("AJAX function using dollar sign!");
+
+    $.ajax({
+        url: "TestAjax.action",
+
+        success: function () {
+            alert("AJAX success!");
+        },
+
+        error: function () {
+            alert("AJAX error!");
+        }
+    });
+
+}
+
+
+function testAjaxjQuery() {
+
+    alert("AJAX jquery function called!");
+
+    jQuery.ajax({
+        url: "TestAjax.action",
+
+        success: function () {
+            alert("AJAX success!");
+        },
+
+        error: function () {
+            alert("AJAX error!");
+        }
+    });
+
+}
+
+
+</script>    
 </body>
 </html>

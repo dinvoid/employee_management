@@ -1,0 +1,96 @@
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+        .container {
+            width: 900px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .buttons {
+            margin-bottom: 20px;
+        }
+        .btn {
+            padding: 8px 18px;
+            margin-right: 5px;
+            border: 1px solid #ccc;
+            background: #f5f5f5;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: #337ab7;
+            color: white;
+        }
+        .btn-success {
+            background: #5cb85c;
+            color: white;
+        }
+        .form-row {
+            margin-bottom: 15px;
+        }
+        .form-row label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+        .form-control {
+            width: 250px;
+            padding: 7px;
+        }
+        .employee-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .employee-table th,
+        .employee-table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .employee-table th {
+            background: #f5f5f5;
+        }
+        .select-column {
+            width: 70px;
+            text-align: center;
+        }
+         #employeeTable {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background: #fff;
+    }
+
+    #employeeTable th,
+    #employeeTable td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+
+    #employeeTable th {
+        background: #f5f5f5;
+        font-weight: bold;
+    }
+
+    #employeeTable th:first-child,
+    #employeeTable td:first-child {
+        width: 50px;
+        text-align: center;
+    }
+
+    #employeeTable tbody tr:hover {
+        background: #f9f9f9;
+    }
+
+    #employeeTable .employeeCheckbox {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+    }

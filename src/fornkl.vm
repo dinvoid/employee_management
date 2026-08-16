@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>For NKL</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#endorsementType").change(function () {
+
+                var value = $(this).val();
+
+                $("#nklSection").hide();
+                $("#infoSection").hide();
+
+                if (value == "PLAN" ||
+                    value == "DESTINATION" ||
+                    value == "TRAVELDATE") {
+
+                    $("#nklSection").show();
+
+                } else if (value == "INFO") {
+
+                    $("#infoSection").show();
+                }
+            });
+
+        });
+        function createPdf() {
+    alert("Create PDF clicked");
+}
+    </script>
+
+</head>
+
+<body>
+            <button type="button" class="btn btn-success" onclick="createPdf()">Create PDF</button>
+<h2>Travel Insurance Endorsement</h2>
+
+<form action="SaveNKL.action" method="post">
+
+<table border="0">
+
+    <tr>
+        <td>Policy No.</td>
+        <td>
+            <input type="text"
+                   name="fields"
+                   value="$!fields"
+                    />
+        </td>
+    </tr>
+
+    <tr>
+        <td>Insured Name</td>
+        <td>
+            <input type="text"
+                   name="fields"
+                   value="$!fields"
+                    />
+        </td>
+    </tr>
+
+    <tr>
+        <td>Destination</td>
+        <td>
+            <input type="text"
+                   name="fields"
+                   value="$!fields"
+                    />
+        </td>
+    </tr>
+
+    <tr>
+        <td>Travel Period</td>
+        <td>
+            <input type="text"
+                   name="fields"
+                   value="08/10/2026 - 08/20/2026"
+                   readonly />
+        </td>
+        
+    </tr>
+    <tr>
+    <td>Test Data</td>
+         <td>
+            <input type="text"
+                   name="test"           
+                    />
+        </td>
+    </>
+
+    <tr>
+        <td>Endorsement Type</td>
+        <td>
+
+            <select id="endorsementType" name="fields">
+
+                <option value="">-- Select --</option>
+
+                <option value="PLAN">Change Plan</option>
+
+                <option value="DESTINATION">Change Destination</option>
+
+                <option value="TRAVELDATE">Change Travel Dates</option>
+
+                <option value="INFO">Change Info</option>
+
+            </select>
+
+        </td>
+    </tr>
+
+</table>
+
+<br/>
+
+<div id="nklSection" style="display:none;">
+
+    <fieldset>
+
+        <legend><b>NKL Details</b></legend>
+
+        <table>
+
+            <tr>
+                <td>NKL Starts Date</td>
+                <td>
+                    <input type="date"
+                           name="nklStart"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td>NKL Date</td>
+                <td>
+                    <input type="date"
+                           name="fields"/>
+                </td>
+            </tr>
+
+        </table>
+
+    </fieldset>
+
+</div>
+
+<div id="infoSection" style="display:none;">
+
+    <fieldset>
+
+        <legend><b>Information Update</b></legend>
+
+        <table>
+
+            <tr>
+                <td>Name</td>
+                <td>
+                    <input type="text"
+                           name="fields"
+                           placeholder="Enter Name"/>
+                </td>
+            </tr>
+
+        </table>
+
+    </fieldset>
+
+</div>
+
+<br/>
+
+<input type="submit" value="Save"/>
+
+<input type="reset" value="Cancel"/>
+
+</form>
+
+</body>
+
+</html>

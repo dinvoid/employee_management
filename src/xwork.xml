@@ -49,7 +49,85 @@
             <interceptor-ref name="defaultStack"/>
             <!-- WALANG <result> tag kasi 'return null;' ang gagamitin sa Java! -->
     </action>
-     
+        <!-- Para sa Object field /and nkl  -->
+    <action name="SaveNKL"
+        class="action.EmployeeAction"
+        method="saveNKL">
+	    <interceptor-ref name="defaultStack"/>
+	    <result name="success" type="velocity">
+	        fornkl.vm
+	    </result>
+	
+	</action>
+	<action name="ForNKL"
+        class="action.EmployeeAction"
+        method="showNKL">
+	    <interceptor-ref name="defaultStack"/>
+	    <result name="success" type="velocity">
+	        fornkl.vm
+	    </result>
+	
+	</action>
+
+	<action name="EmployeePrint"
+        class="action.EmployeeAction"
+        method="printEmp">
+	    <interceptor-ref name="defaultStack"/>
+	    <result name="success" type="velocity">
+	        employee.vm
+	    </result>
+	    <result name="modal" type="velocity">
+        <param name="Location">
+            modal.vm
+        </param>
+       </result>
+	  </action>
+<!-- Para sa Angular / API request  
+	<action name="SearchEmployeeParams"
+	        class="action.EmployeeAction"
+	        method="searchEmployeeParamsv2">
+	        <interceptor-ref name="defaultStack"/>
+	    <result name="ajaxSuccess" type="velocity">success.vm</result>
+	    <result name="ajaxError" type="velocity">error.vm</result>
+	</action>
+-->	
+<action name="SearchEmployeeParams"
+        class="action.EmployeeAction"
+        method="searchEmployeeParams">
+
+    <interceptor-ref name="defaultStack"/>
+
+    <result name="success" type="velocity">
+        employee.vm
+    </result>
+
+    <result name="error" type="velocity">
+        employee.vm
+    </result>
+
+</action>
+	
+	<action name="CreateEmployeePdf"
+	        class="action.EmployeeAction"
+	        method="createEmployeePdf">
+	    <result name="success" type="velocity">employee.vm</result>
+	</action>
+	
+	<action name="DownloadEmployeePdf"
+	        class="action.EmployeeAction"
+	        method="downloadEmployeePdf">
+	    <result name="success" type="velocity">vm/pdfdownload.vm</result>
+	</action>
+	
+	<action name="ExitEmployee"
+	        class="action.EmployeeAction"
+	        method="exitEmployee">
+	    <result name="success" type="velocity">vm/exit.vm</result>
+	</action>
+	<action name="DownloadEmployeeExcel" class="action.ExcelDownloadAction">
+    <!-- walang result kailangan, direct file output ito -->
+</action>
+ 
   </package>
 </xwork>
 

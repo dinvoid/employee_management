@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+"http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <!-- Job 1: Test/Daily Report Job -->
+    <bean id="dailyReportJob" class="service.Scheduler"/>
+
+    <bean id="testJobDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="dailyReportJob"/>
+        <property name="targetMethod" value="execute"/>
+    </bean>
+
+    <bean id="testTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="testJobDetail"/>
+        <property name="cronExpression" value="0 41 17 ? * SUN#3"/>
+    </bean>
+
+    <!-- Job 2: Excel Report Job -->
+    <bean id="excelReportJob" class="service.ExcelReportJob"/>
+
+    <bean id="excelReportJobDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="excelReportJob"/>
+        <property name="targetMethod" value="execute"/>
+    </bean>
+
+    <bean id="excelReportTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="excelReportJobDetail"/>
+        <property name="cronExpression" value="0 */5 * * * ?"/>  <!-- every minute, for testing -->
+    </bean>
+
+    <!-- IISANG Scheduler na lang, parehong triggers nasa loob -->
+    <bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="testTrigger"/>
+                <ref bean="excelReportTrigger"/>
+            </list>
+        </property>
+    </bean>
+
+</beans>

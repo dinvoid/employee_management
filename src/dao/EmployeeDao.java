@@ -130,4 +130,121 @@ public class EmployeeDao {
 
     }
 
+
+
+    public static List<Employee> searchEmployeeParams(String name, String department) {
+
+        Connection conn = null;
+        SessionFactory sessionFactory =
+            (SessionFactory) SpringHelper
+                .getAppctx()
+                .getBean("empmSessionFactory");
+
+        Session session =
+            SessionFactoryUtils.getSession(sessionFactory, true);
+
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        List<Employee> empList = new ArrayList<Employee>();
+
+        try {
+
+            conn = session.connection();
+
+            String sql =
+                "SELECT ID, NAME, DEPARTMENT " +
+                "FROM EMPLOYEE " +
+                "WHERE NAME = ? " +
+                "AND DEPARTMENT = ?";
+
+            System.out.println("Employee searchSql: " + sql);
+            System.out.println("Name parameter: " + name);
+            System.out.println("Department parameter: " + department);
+
+            pstmt = conn.prepareStatement(sql);
+
+            pstmt.setString(1, name);
+            pstmt.setString(2, department);
+
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+
+                Employee emp = new Employee();
+
+                emp.setId(rs.getInt("ID"));
+                emp.setName(rs.getString("NAME"));
+                emp.setDepartment(rs.getString("DEPARTMENT"));
+
+                empList.add(emp);
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+        } catch (HibernateException e) {
+
+            e.printStackTrace();
+
+        } finally {
+
+            DbUtil.closeQuietly(rs);
+            DbUtil.closeQuietly(pstmt);
+            DbUtil.releaseSession(session, sessionFactory);
+        }
+
+        return empList;
+    }
+
+	public static List<Employee> searchEmployeeParamsv1(String name, String department) {
+		 Connection conn=null;
+		 SessionFactory sessionFactory =
+		            (SessionFactory) SpringHelper
+		                .getAppctx()
+		                .getBean("empmSessionFactory");
+
+		 Session session =
+		            SessionFactoryUtils.getSession(sessionFactory, true);
+
+		 Statement stmt = null;
+		 ResultSet rs=null;
+		 List<Employee> empList=new ArrayList<Employee>();
+		        try {
+		        	
+		        	conn=session.connection();
+		        	stmt=conn.createStatement();
+		        			
+		        	String sql = "SELECT name, department " +
+		                    "FROM employee " +
+		                    "WHERE name = ? " +
+		                    "AND department = ?";
+		        	rs=stmt.executeQuery(sql);
+		        	Employee emp=null;
+		        	while(rs.next()) {
+		        		emp=new Employee();
+		        		emp.setName(rs.getString("NAME"));
+		        		emp.setDepartment(rs.getString("DEPARTMENT"));
+		        		
+		        		empList.add(emp);
+		        	}
+		        	emp=null;
+		        
+			    } catch (SQLException e) {
+			
+			        e.printStackTrace();
+			
+			    } catch (HibernateException e) {
+			
+			        e.printStackTrace();
+			
+			    } finally {
+			    	DbUtil.closeQuietly(rs);
+			    	DbUtil.closeQuietly(stmt);
+			    	DbUtil.releaseSession(session, sessionFactory);
+			    }
+		        return empList;
+	}
+
 }
