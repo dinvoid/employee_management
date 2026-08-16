@@ -119,6 +119,12 @@ public class EmployeeAction extends ActionSupport implements PartyHashMapAware {
     }
     public String getEmpList22() {
     	System.out.print("get223");
+    	  // SIMULATE DELAY - para lang ma-test yung loading spinner
+        try {
+            Thread.sleep(3000); // 3 seconds delay
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         empList2 = new ArrayList<Map<String, Object>>();
 
         Map<String, Object> emp1 = new HashMap<String, Object>();
@@ -143,7 +149,13 @@ public class EmployeeAction extends ActionSupport implements PartyHashMapAware {
         emp3.put("department", "HR");
 
         empList2.add(emp3);
-        System.out.println("empList2 size = " + empList2.size());
+        
+        Map<String, Object> emp4 = new HashMap<String, Object>();
+        emp4.put("id", "Din");
+        emp4.put("name", "Eldin betal");
+        emp4.put("department", "Dev");
+
+        empList2.add(emp4);
 
 
         return "modal";

@@ -72,37 +72,69 @@
         border-collapse: collapse;
         margin-top: 20px;
         background: #fff;
-    }
+    	}
 
-    #employeeTable th,
-    #employeeTable td {
-        border: 1px solid #ddd;
-        padding: 10px;
-        text-align: left;
-    }
-
-    #employeeTable th {
-        background: #f5f5f5;
-        font-weight: bold;
-    }
-
-    #employeeTable th:first-child,
-    #employeeTable td:first-child {
-        width: 50px;
-        text-align: center;
-    }
-
-    #employeeTable tbody tr:hover {
-        background: #f9f9f9;
-    }
-
-    #employeeTable .employeeCheckbox {
-        width: 16px;
-        height: 16px;
-        cursor: pointer;
-    }
-    
+	    #employeeTable th,
+	    #employeeTable td {
+	        border: 1px solid #ddd;
+	        padding: 10px;
+	        text-align: left;
+	    }
+	
+	    #employeeTable th {
+	        background: #f5f5f5;
+	        font-weight: bold;
+	    }
+	
+	    #employeeTable th:first-child,
+	    #employeeTable td:first-child {
+	        width: 50px;
+	        text-align: center;
+	    }
+	
+	    #employeeTable tbody tr:hover {
+	        background: #f9f9f9;
+	    }
+	
+	    #employeeTable .employeeCheckbox {
+	        width: 16px;
+	        height: 16px;
+	        cursor: pointer;
+	    }
+	    #loadingOverlay {
+	    position: fixed;
+	    top: 0;
+	    left: 0;
+	    width: 100%;
+	    height: 100%;
+	    background: rgba(255, 255, 255, 0.7);
+	    z-index: 2000;
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+		}
+	
+		.loading-box {
+		    text-align: center;
+		}
+		
+		.spinner {
+		    border: 6px solid #f3f3f3;
+		    border-top: 6px solid #337ab7;
+		    border-radius: 50%;
+		    width: 50px;
+		    height: 50px;
+		    animation: spin 1s linear infinite;
+		    margin: 0 auto 10px auto;
+		}
+		
+		@keyframes spin {
+		    0%   { transform: rotate(0deg); }
+		    100% { transform: rotate(360deg); }
+		}
+	    
     </style>
+    
 </head>
 
 <body>
@@ -187,7 +219,12 @@
 </table>
 #parse("modal.vm")
 </div>
-
+<div id="loadingOverlay" style="display:none;">
+    <div class="loading-box">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+</div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
 function downloadExcel() {
@@ -480,6 +517,7 @@ function showModal() {
     document.getElementById("myModal").style.display = "block";
 }
 function showEmployeeModal(id, name) {
+	jQuery("#loadingOverlay").show();
 
     jQuery.ajax({
         url: "EmployeePrint!getEmpList22.action",
@@ -514,6 +552,10 @@ function showEmployeeModal(id, name) {
             console.log("AJAX Error: " + error);
             console.log(xhr.responseText);
 
+        },
+                complete: function() {
+            // ITAGO ANG LOADING - TATAKBO ITO KAHIT SUCCESS O ERROR
+            jQuery("#loadingOverlay").hide();
         }
     });
 
